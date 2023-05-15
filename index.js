@@ -30,27 +30,38 @@ const run = async () => {
 
     // get products
     app.get("/api/products", async (req, res) => {
+      try {
         const page = Number(req.query.page) || 0;
         const limit = Number(req.query.limit) || 10;
         const skip = page * limit;
         const products = Products.find().skip(skip).limit(limit);
         const result = await products.toArray();
         res.send(result);
+      } catch (error) {
+        res.status(500).send({ error: error.message });
+      }
     });
 
     // get products by array of IDs
     app.post("/api/products", async (req, res) => {
-        const allId = req.body.map(id=> new ObjectId(id));
-        const result = await Products.find({_id: {$in: allId}}).toArray();
+      try {
+        const allId = req.body.map((id) => new ObjectId(id));
+        const result = await Products.find({ _id: { $in: allId } }).toArray();
         res.send(result);
-    })
+      } catch (error) {
+        res.status(500).send({ error: error.message });
+      }
+    });
 
     // get total number of products
     app.get("/api/products-length", async (req, res) => {
+      try {
         const result = await Products.countDocuments();
-        res.send({total_products: result});
-    })
-    
+        res.send({ total_products: result });
+      } catch (error) {
+        res.status(500).send({ error: error.message });
+      }
+    });
   } catch (error) {
     console.log(error);
   }
