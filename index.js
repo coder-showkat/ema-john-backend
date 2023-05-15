@@ -29,10 +29,10 @@ const client = new MongoClient(uri, {
 
 const run = async () => {
   try {
-    await client.connect();
-    console.log("Mongodb is connected");
-
+    // await client.connect();
+    
     const Products = client.db("ema-john").collection("products");
+    console.log("Mongodb is connected");
 
     // get products
     app.get("/api/products", async (req, res) => {
